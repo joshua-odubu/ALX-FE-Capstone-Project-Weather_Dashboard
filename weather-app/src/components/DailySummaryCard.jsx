@@ -1,54 +1,29 @@
-import { BellIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { BellIcon } from "@heroicons/react/24/outline";
 
 export default function DailySummaryCard() {
-  const [refreshing, setRefreshing] = useState(false);
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-
-    // Mimic loading (e.g., fetching new data)
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1500);
-  };
+  // Simple placeholder text for now — you can improve this later
+  const summaryText =
+    "Expect mostly cloudy conditions throughout the day with light winds. Temperatures will remain mild.";
 
   return (
     <div className="bg-white/20 backdrop-blur-lg p-6 rounded-2xl shadow-md w-full">
 
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <BellIcon className="w-6 h-6 text-blue-600" />
-          <h2 className="text-lg font-medium text-gray-800">Daily Summary</h2>
-        </div>
-
-        <button
-          onClick={handleRefresh}
-          className="p-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 transition shadow-sm"
-        >
-          <ArrowPathIcon
-            className={`w-5 h-5 transition-transform ${
-              refreshing ? "animate-spin" : ""
-            }`}
-          />
-        </button>
+      {/* Header Row */}
+      <div className="flex items-center gap-2 mb-3">
+        <BellIcon className="w-6 h-6 text-gray-700" />
+        <h2 className="text-lg font-semibold text-gray-900">
+          Today's Weather Summary
+        </h2>
       </div>
 
       {/* Divider */}
-      <div className="border-t border-white/40 my-4"></div>
+      <div className="border-t border-white/40 my-3"></div>
 
-      {/* Structured Summary */}
-      <div className="space-y-2">
-        <p className="text-sm text-gray-700 leading-relaxed">
-          Today will start partly cloudy with light winds. Afternoon temperatures 
-          will rise gradually, with a high of 22°.
-        </p>
-
-        <p className="text-sm text-gray-700 leading-relaxed">
-          Expect cooler conditions in the evening with increased cloud cover.
-        </p>
-      </div>
+      {/* Summary Text */}
+      <p className="text-gray-700 text-sm leading-relaxed">
+        {summaryText}
+      </p>
     </div>
   );
 }
