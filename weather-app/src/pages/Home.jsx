@@ -8,7 +8,7 @@ import { useState } from "react";   // <-- You must import useState
 
 export default function Home() {
 
-  // ✅ Shared weather data stored here
+  // Shared weather data stored here
   const [temperature, setTemperature] = useState(22);
   const [uvIndex, setUvIndex] = useState(6);
   const [condition, setCondition] = useState("Partly Cloudy");
@@ -37,7 +37,10 @@ export default function Home() {
         setWind={setWind}
       />
 
-      <DailySummaryCard />
+      <DailySummaryCard
+        condition={condition}
+        temperature={temperature}
+      />
 
       {/* Clothing and eyewear get temperature + UV */}
       <ClothingRecommendationCard temperature={temperature} />
