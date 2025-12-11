@@ -1,35 +1,46 @@
 import { SunIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
-export default function ClothingCard() {
-  // For now, I'll use a fixed temperature.
-  // Later, I can pass real temperature from WeatherCard via props or context.
-  const [temperature] = useState(22);
-
+export default function ClothingRecommendationCard({ temperature }) {
+  
   const getClothingAdvice = (temp) => {
-    if (temp < 10) return "It's cold today. Wear a warm jacket.";
-    if (temp < 20) return "Mild weather. A light jumper or long sleeves is fine.";
-    if (temp < 28) return "Warm outside. A T-shirt is comfortable.";
-    return "Hot weather. Wear breathable clothing and stay hydrated.";
+    if (temp <= 5) return "It's very cold. Wear a heavy coat, gloves, and a scarf.";
+    if (temp <= 12) return "Cool weather. A jacket or hoodie is recommended.";
+    if (temp <= 20) return "Mild weather. A light long-sleeve will do.";
+    if (temp <= 26) return "Warm weather. T-shirt is fine.";
+    return "Hot weather. Wear light clothing and stay hydrated.";
+  };
+
+  const getBackgroundColor = (temp) => {
+    if (temp <= 5) return "bg-blue-300/30";      // very cold
+    if (temp <= 12) return "bg-blue-200/30";     // cold
+    if (temp <= 20) return "bg-gray-200/30";     // mild
+    if (temp <= 26) return "bg-yellow-200/30";   // warm
+    return "bg-red-300/30";                      // hot
   };
 
   return (
-    <div className="bg-white/20 backdrop-blur-lg p-6 rounded-2xl shadow-md w-full">
-      
+    <div
+      className={`${getBackgroundColor(
+        temperature
+      )} backdrop-blur-lg p-6 rounded-2xl shadow-md w-full transition-all duration-300`}
+    >
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
-        <SunIcon className="w-6 h-6 text-yellow-500" />
+        <span className="text-2xl">👗</span>
         <h2 className="text-lg font-semibold text-gray-900">
           Clothing Recommendation
         </h2>
       </div>
 
-      {/* Divider */}
       <div className="border-t border-white/40 my-3"></div>
 
-      {/* Advice Text */}
       <p className="text-gray-700 text-sm leading-relaxed">
         {getClothingAdvice(temperature)}
+      </p>
+
+      <p className="mt-2 text-gray-500 text-xs">
+        Current temperature: {temperature}°
       </p>
     </div>
   );

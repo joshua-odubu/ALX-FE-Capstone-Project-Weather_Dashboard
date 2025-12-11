@@ -1,17 +1,13 @@
-import { useState } from "react";
-import {
-  SunIcon,
-  CloudIcon,
-  BoltIcon
-} from "@heroicons/react/24/outline";
+import { SunIcon, CloudIcon, BoltIcon } from "@heroicons/react/24/outline";
 
-export default function WeatherCard() {
-  const [condition, setCondition] = useState("Partly Cloudy");
-  const [temperature, setTemperature] = useState(22);
-  const [feelsLike, setFeelsLike] = useState(20);
-  const [humidity, setHumidity] = useState(65);
-  const [wind, setWind] = useState("12 km/h");
-  const [uvIndex, setUvIndex] = useState(6);
+export default function WeatherCard({
+  temperature, setTemperature,
+  uvIndex, setUvIndex,
+  condition, setCondition,
+  feelsLike, setFeelsLike,
+  humidity, setHumidity,
+  wind, setWind
+}) {
 
   const getWeatherIcon = (condition) => {
     switch (condition.toLowerCase()) {
@@ -67,6 +63,7 @@ export default function WeatherCard() {
     const randomCondition =
       conditions[Math.floor(Math.random() * conditions.length)];
 
+    // ⭐ PERFECT LOCATION ⭐
     setCondition(randomCondition);
     setTemperature(Math.floor(Math.random() * 15) + 15);
     setFeelsLike(Math.floor(Math.random() * 15) + 15);
