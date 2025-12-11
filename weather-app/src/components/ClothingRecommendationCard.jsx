@@ -2,8 +2,8 @@ import { SunIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 export default function ClothingCard() {
-  // For now, we'll use a fixed temperature.
-  // Later, we can pass real temperature from WeatherCard via props or context.
+  // For now, I'll use a fixed temperature.
+  // Later, I can pass real temperature from WeatherCard via props or context.
   const [temperature] = useState(22);
 
   const getClothingAdvice = (temp) => {
