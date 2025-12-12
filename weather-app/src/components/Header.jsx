@@ -1,29 +1,91 @@
-export default function Header() {
+import { useState } from "react";
+
+export default function Header({
+  city,
+  country,
+  onSearchCity,
+  onTypeCity,
+  suggestions
+}) {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSearch = () => {
+    const trimmed = inputValue.trim();
+    if (!trimmed) return;
+
+    onSearchCity(trimmed);
+    setInputValue("");
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSearch();
+  };
+
   return (
-    <div className="bg-white/30 backdrop-blur-md shadow-sm rounded-3xl px-6 py-4 border border-white/40
-                    flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="relative w-full">
+      
+      {/* MAIN HEADER CARD */}
+      <div className="bg-white/30 backdrop-blur-md shadow-sm rounded-3xl px-6 py-4 border border-white/40">
+        
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 
-      {/* Left Title */}
-      <h1 className="text-lg font-medium text-gray-800">
-        Weather Dashboard
-      </h1>
+          {/* CITY + COUNTRY DISPLAY */}
+          <h1 className="text-lg font-medium text-gray-800">
+            Weather Dashboard:{" "}
+            <span className="font-normal">
+              {city}
+              {country ? `, ${country}` : ""}
+            </span>
+          </h1>
 
-      {/* Search Area */}
-      <div className="flex items-center gap-2 w-full md:w-auto md:flex-none">
+          {/* SEARCH BAR */}
+          <div className="flex items-center gap-2 w-full sm:w-[50%] md:w-[45%] lg:w-[40%]">
+            <input
+              type="text"
+              placeholder="Search city..."
+              className="flex-grow flex-shrink min-w-0 px-4 py-[10px]
+                         bg-white/40 backdrop-blur rounded-full outline-none
+                         border border-white/50 text-gray-700"
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                onTypeCity(e.target.value); // fetch suggestions as you type
+              }}
+              onKeyDown={handleKeyDown}
+            />
 
-        <input
-          type="text"
-          placeholder="Search city..."
-          className="flex-grow min-w-0 h-11 px-4 bg-white/40 backdrop-blur 
-                     rounded-full outline-none border border-white/50 text-gray-700 focus:ring-2 focus:ring-blue-400"
-        />
+            <button
+              className="px-4 py-2 bg-gray-300 hover:bg-gray-400 
+                         text-gray-700 rounded-full shadow-lg transition"
+              onClick={handleSearch}
+            >
+              Search
+            </button>
+          </div>
 
-        <button className="flex-shrink-0 h-11 px-6 bg-gray-300 hover:bg-gray-400 text-gray-700 
-                           rounded-full shadow-md transition">
-          Search
-        </button>
-
+        </div>
       </div>
+
+      {/* AUTOCOMPLETE DROPDOWN */}
+      {suggestions.length > 0 && (
+        <ul
+          className="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 
+                     max-h-60 overflow-y-auto z-50"
+        >
+          {suggestions.map((item, index) => (
+            <li
+              key={index}
+              className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+              onClick={() => {
+                onSearchCity(item.name);
+                setInputValue("");
+              }}
+            >
+              {item.name}, {item.country}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
