@@ -20,7 +20,7 @@ export default function Home() {
   const [city, setCity] = useState("London");
   const [country, setCountry] = useState("United Kingdom");
 
-  // Weather Stats
+  // Current weather
   const [temperature, setTemperature] = useState(22);
   const [uvIndex, setUvIndex] = useState(6);
   const [condition, setCondition] = useState("Partly Cloudy");
@@ -28,11 +28,14 @@ export default function Home() {
   const [humidity, setHumidity] = useState(65);
   const [wind, setWind] = useState("12 km/h");
 
+  // Daily forecast (for Forecast page)
+  const [dailyForecast, setDailyForecast] = useState([]);
+
   // Autocomplete suggestions
   const [suggestions, setSuggestions] = useState([]);
 
   // -----------------------------
-  // Autocomplete Typing Handler
+  // Autocomplete typing handler
   // -----------------------------
   const handleTypeCity = async (query) => {
     if (query.length < 2) {
@@ -65,11 +68,11 @@ export default function Home() {
   };
 
   // -----------------------------
-  // On Search → Fetch Weather
+  // Search city → fetch weather
   // -----------------------------
   const handleSearchCity = async (cityName) => {
     try {
-      // 1. Lookup geolocation for city
+      // 1. Geocode city
       const geoRes = await fetch(
         `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
           cityName
@@ -85,7 +88,7 @@ export default function Home() {
       const { lat, lon, name, country: countryCode } = geoData[0];
       const fullCountry = getCountryName(countryCode);
 
-      // 2. Fetch weather from OneCall API
+      // 2. Fetch weather (One Call API)
       const weatherRes = await fetch(
         `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
       );
@@ -96,7 +99,7 @@ export default function Home() {
         return;
       }
 
-      // 3. Update UI
+      // 3. Update state
       setCity(name);
       setCountry(fullCountry);
 
@@ -107,7 +110,10 @@ export default function Home() {
       setUvIndex(weatherData.current.uvi);
       setCondition(weatherData.current.weather[0].description);
 
-      setSuggestions([]); // hide dropdown
+      // Store 7-day forecast for Forecast page
+      setDailyForecast(weatherData.daily?.slice(0, 7) || []);
+
+      setSuggestions([]);
     } catch (err) {
       console.error("Weather fetch error:", err);
       alert("Could not fetch weather.");
@@ -115,7 +121,7 @@ export default function Home() {
   };
 
   // -----------------------------
-  // Load London by default on app start
+  // Load default city on startup
   // -----------------------------
   useEffect(() => {
     handleSearchCity("London");
@@ -140,12 +146,17 @@ export default function Home() {
         wind={wind}
       />
 
-      <DailySummaryCard condition={condition} temperature={temperature} />
+      <DailySummaryCard
+        condition={condition}
+        temperature={temperature}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ClothingRecommendationCard temperature={temperature} />
         <EyewearRecommendationCard uvIndex={uvIndex} />
       </div>
+
+      {/* dailyForecast is now ready to be passed to Forecast page */}
     </div>
   );
 }
