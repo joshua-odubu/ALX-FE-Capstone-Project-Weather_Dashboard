@@ -1,6 +1,8 @@
-<Settings>
-    <CitySelector />
-    <SummaryTimePicker />
-    <AdviceToggles />
-    <ThemeSelector />
-</Settings>
+// src/pages/Settings.jsx
+export default function Settings() {
+  return (
+    <div className="p-6">
+      <h1 className="text-xl font-semibold">Settings</h1>
+    </div>
+  );
+}
