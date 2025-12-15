@@ -8,39 +8,49 @@ import EyewearRecommendationCard from "../components/EyewearRecommendationCard";
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
 
-// Country code → full name
+// Convert country code → full country name
 const getCountryName = (code) => {
   if (!code) return "";
   return new Intl.DisplayNames(["en"], { type: "region" }).of(code);
 };
 
-export default function Home() {
+export default function Home({ setDailyForecast }) {
+  /* -----------------------------
+     Location
+  ----------------------------- */
   const [city, setCity] = useState("London");
   const [country, setCountry] = useState("United Kingdom");
 
+  /* -----------------------------
+     Weather data
+  ----------------------------- */
   const [temperature, setTemperature] = useState(22);
-  const [uvIndex, setUvIndex] = useState(6);
-  const [condition, setCondition] = useState("Partly Cloudy");
   const [feelsLike, setFeelsLike] = useState(20);
   const [humidity, setHumidity] = useState(65);
   const [wind, setWind] = useState("12 km/h");
+  const [uvIndex, setUvIndex] = useState(6);
+  const [condition, setCondition] = useState("Partly Cloudy");
 
+  /* -----------------------------
+     Autocomplete
+  ----------------------------- */
   const [suggestions, setSuggestions] = useState([]);
 
-  // AUTOCOMPLETE
+  // Handle typing in search input
   const handleTypeCity = async (query) => {
-    if (query.length < 2) {
+    if (!query || query.length < 2) {
       setSuggestions([]);
       return;
     }
 
     try {
       const res = await fetch(
-        `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=5&appid=${API_KEY}`
+        `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
+          query
+        )}&limit=5&appid=${API_KEY}`
       );
-      const data = await res.json();
 
-      console.log("Autocomplete data:", data); // <-- IMPORTANT
+      const data = await res.json();
 
       if (Array.isArray(data)) {
         setSuggestions(
@@ -57,39 +67,49 @@ export default function Home() {
     }
   };
 
-  // SEARCH
+  /* -----------------------------
+     Search + Fetch Weather
+  ----------------------------- */
   const handleSearchCity = async (input) => {
     try {
       let lat, lon, name, fullCountry;
 
+      // If selection came from autocomplete
       if (typeof input === "object") {
         ({ lat, lon, name, country: fullCountry } = input);
       } else {
         const geoRes = await fetch(
-          `https://api.openweathermap.org/geo/1.0/direct?q=${input}&limit=1&appid=${API_KEY}`
+          `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
+            input
+          )}&limit=1&appid=${API_KEY}`
         );
-        const geoData = await geoRes.json();
 
+        const geoData = await geoRes.json();
         if (!geoData.length) {
           alert("City not found");
           return;
         }
 
-        ({ lat, lon, name } = geoData[0]);
+        lat = geoData[0].lat;
+        lon = geoData[0].lon;
+        name = geoData[0].name;
         fullCountry = getCountryName(geoData[0].country);
       }
 
-    // fetch weather here...
-
+      // Fetch weather (current + daily)
       const weatherRes = await fetch(
         `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
       );
-      const weatherData = await weatherRes.json();
 
+      const weatherData = await weatherRes.json();
       if (!weatherData.current) return;
 
+      /* -----------------------------
+         Update UI state
+      ----------------------------- */
       setCity(name);
       setCountry(fullCountry);
+
       setTemperature(Math.round(weatherData.current.temp));
       setFeelsLike(Math.round(weatherData.current.feels_like));
       setHumidity(weatherData.current.humidity);
@@ -97,16 +117,25 @@ export default function Home() {
       setUvIndex(weatherData.current.uvi);
       setCondition(weatherData.current.weather[0].description);
 
+      // 🔑 SEND 7-DAY FORECAST TO APP
+      setDailyForecast(weatherData.daily.slice(0, 7));
+
       setSuggestions([]);
     } catch (err) {
-      console.error(err);
+      console.error("Weather fetch error:", err);
     }
   };
 
+  /* -----------------------------
+     Load default city on start
+  ----------------------------- */
   useEffect(() => {
     handleSearchCity("London");
   }, []);
 
+  /* -----------------------------
+     Render
+  ----------------------------- */
   return (
     <div className="w-full md:w-4/5 lg:w-2/3 mx-auto space-y-6 p-6">
       <Header
@@ -119,14 +148,17 @@ export default function Home() {
 
       <WeatherCard
         temperature={temperature}
-        uvIndex={uvIndex}
-        condition={condition}
         feelsLike={feelsLike}
         humidity={humidity}
         wind={wind}
+        uvIndex={uvIndex}
+        condition={condition}
       />
 
-      <DailySummaryCard condition={condition} temperature={temperature} />
+      <DailySummaryCard
+        condition={condition}
+        temperature={temperature}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <ClothingRecommendationCard temperature={temperature} />
