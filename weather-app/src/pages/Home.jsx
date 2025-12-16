@@ -8,35 +8,31 @@ import EyewearRecommendationCard from "../components/EyewearRecommendationCard";
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
 
-// Convert country code → full country name
+// Country code → full name
 const getCountryName = (code) => {
   if (!code) return "";
   return new Intl.DisplayNames(["en"], { type: "region" }).of(code);
 };
 
-export default function Home({ setDailyForecast }) {
-  /* -----------------------------
-     Location
-  ----------------------------- */
+export default function Home() {
+  // Location
   const [city, setCity] = useState("London");
   const [country, setCountry] = useState("United Kingdom");
 
-  /* -----------------------------
-     Weather data
-  ----------------------------- */
-  const [temperature, setTemperature] = useState(22);
-  const [feelsLike, setFeelsLike] = useState(20);
-  const [humidity, setHumidity] = useState(65);
-  const [wind, setWind] = useState("12 km/h");
-  const [uvIndex, setUvIndex] = useState(6);
-  const [condition, setCondition] = useState("Partly Cloudy");
+  // Weather
+  const [temperature, setTemperature] = useState(0);
+  const [feelsLike, setFeelsLike] = useState(0);
+  const [humidity, setHumidity] = useState(0);
+  const [wind, setWind] = useState("");
+  const [uvIndex, setUvIndex] = useState(0);
+  const [condition, setCondition] = useState("");
 
-  /* -----------------------------
-     Autocomplete
-  ----------------------------- */
+  // Autocomplete
   const [suggestions, setSuggestions] = useState([]);
 
-  // Handle typing in search input
+  /* -----------------------------
+     AUTOCOMPLETE
+  ----------------------------- */
   const handleTypeCity = async (query) => {
     if (!query || query.length < 2) {
       setSuggestions([]);
@@ -68,16 +64,20 @@ export default function Home({ setDailyForecast }) {
   };
 
   /* -----------------------------
-     Search + Fetch Weather
+     SEARCH + WEATHER
   ----------------------------- */
   const handleSearchCity = async (input) => {
     try {
       let lat, lon, name, fullCountry;
 
-      // If selection came from autocomplete
+      // ✅ Autocomplete selection
       if (typeof input === "object") {
         ({ lat, lon, name, country: fullCountry } = input);
-      } else {
+      } 
+      // ✅ Manual text search
+      else {
+        if (!input || input.trim().length < 2) return;
+
         const geoRes = await fetch(
           `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
             input
@@ -85,7 +85,8 @@ export default function Home({ setDailyForecast }) {
         );
 
         const geoData = await geoRes.json();
-        if (!geoData.length) {
+
+        if (!Array.isArray(geoData) || geoData.length === 0) {
           alert("City not found");
           return;
         }
@@ -96,29 +97,22 @@ export default function Home({ setDailyForecast }) {
         fullCountry = getCountryName(geoData[0].country);
       }
 
-      // Fetch weather (current + daily)
+      // Fetch weather
       const weatherRes = await fetch(
         `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
       );
 
       const weatherData = await weatherRes.json();
-      if (!weatherData.current) return;
+      if (!weatherData?.current) return;
 
-      /* -----------------------------
-         Update UI state
-      ----------------------------- */
       setCity(name);
       setCountry(fullCountry);
-
       setTemperature(Math.round(weatherData.current.temp));
       setFeelsLike(Math.round(weatherData.current.feels_like));
       setHumidity(weatherData.current.humidity);
       setWind(`${Math.round(weatherData.current.wind_speed)} km/h`);
       setUvIndex(weatherData.current.uvi);
       setCondition(weatherData.current.weather[0].description);
-
-      // 🔑 SEND 7-DAY FORECAST TO APP
-      setDailyForecast(weatherData.daily.slice(0, 7));
 
       setSuggestions([]);
     } catch (err) {
@@ -127,15 +121,12 @@ export default function Home({ setDailyForecast }) {
   };
 
   /* -----------------------------
-     Load default city on start
+     LOAD DEFAULT CITY
   ----------------------------- */
   useEffect(() => {
     handleSearchCity("London");
   }, []);
 
-  /* -----------------------------
-     Render
-  ----------------------------- */
   return (
     <div className="w-full md:w-4/5 lg:w-2/3 mx-auto space-y-6 p-6">
       <Header
