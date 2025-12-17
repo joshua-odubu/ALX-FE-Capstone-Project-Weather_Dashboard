@@ -73,15 +73,15 @@ export default function Header({
             <li
               key={index}
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-              onClick={() => {
-                onSearchCity({
-                  name: suggestion.name,
-                  lat: suggestion.lat,
-                  lon: suggestion.lon,
-                  country: suggestion.country
-                });
-                setInputValue("");
-              }}
+                onClick={() => {
+                  onSearchCity({
+                    name: suggestion.name,
+                    lat: suggestion.lat,
+                    lon: suggestion.lon,
+                    countryCode: suggestion.countryCode
+                  });
+                  setInputValue("");
+                }}
             >
               {suggestion.name}, {suggestion.country}
             </li>
