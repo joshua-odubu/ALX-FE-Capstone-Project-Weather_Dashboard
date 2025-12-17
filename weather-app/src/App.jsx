@@ -1,3 +1,4 @@
+// src/App.jsx
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 
@@ -7,7 +8,13 @@ import Settings from "./pages/Settings";
 import BottomNav from "./components/BottomNav";
 
 export default function App() {
-  const [dailyForecast, setDailyForecast] = useState([]);
+  const [location, setLocation] = useState({
+    city: "London",
+    country: "United Kingdom"
+  });
+
+  const [currentWeather, setCurrentWeather] = useState(null);
+  const [forecast, setForecast] = useState([]);
 
   return (
     <div className="min-h-screen pb-20">
@@ -16,7 +23,12 @@ export default function App() {
           path="/"
           element={
             <Home
-              setDailyForecast={setDailyForecast}
+              location={location}
+              setLocation={setLocation}
+              currentWeather={currentWeather}
+              setCurrentWeather={setCurrentWeather}
+              forecast={forecast}
+              setForecast={setForecast}
             />
           }
         />
@@ -24,7 +36,10 @@ export default function App() {
         <Route
           path="/forecast"
           element={
-            <Forecast dailyForecast={dailyForecast} />
+            <Forecast
+              location={location}
+              forecast={forecast}
+            />
           }
         />
 
