@@ -1,12 +1,12 @@
 // src/pages/Forecast.jsx
-import ForecastRow from "../components/ForecastRow";
+import ForecastCard from "../components/ForecastCard";
 
-export default function Forecast({ city, country, dailyForecast }) {
-  if (!dailyForecast || dailyForecast.length === 0) {
+export default function Forecast({ location, forecast }) {
+  if (!forecast || forecast.length === 0) {
     return (
       <div className="w-full md:w-4/5 lg:w-2/3 mx-auto p-6">
-        <p className="text-gray-500 text-center">
-          Search for a city to see the forecast
+        <p className="text-center text-gray-500">
+          Forecast data not available.
         </p>
       </div>
     );
@@ -14,26 +14,23 @@ export default function Forecast({ city, country, dailyForecast }) {
 
   return (
     <div className="w-full md:w-4/5 lg:w-2/3 mx-auto space-y-6 p-6 pb-24">
-
-      {/* Header */}
-      <div>
-        <h1 className="text-xl font-semibold">7-Day Forecast</h1>
-        <p className="text-sm text-gray-500">Extended weather outlook</p>
+      
+      {/* Header / Location */}
+      <div className="bg-white/30 backdrop-blur-md rounded-3xl px-6 py-4 border border-white/40">
+        <h1 className="text-lg font-medium text-gray-800">
+          7-Day Forecast:{" "}
+          <span className="font-normal">
+            {location.city}, {location.country}
+          </span>
+        </h1>
       </div>
 
-      {/* Today */}
-      <ForecastRow
-        isToday
-        data={dailyForecast[0]}
-      />
-
-      {/* Rest of days */}
-      <div className="space-y-3">
-        {dailyForecast.slice(1).map((day, index) => (
-          <ForecastRow key={index} data={day} />
+      {/* Forecast cards */}
+      <div className="space-y-4">
+        {forecast.map((day, index) => (
+          <ForecastCard key={index} day={day} />
         ))}
       </div>
-
     </div>
   );
 }

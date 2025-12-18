@@ -6,7 +6,7 @@ import DailySummaryCard from "../components/DailySummaryCard";
 import ClothingRecommendationCard from "../components/ClothingRecommendationCard";
 import EyewearRecommendationCard from "../components/EyewearRecommendationCard";
 
-const API_KEY = import.meta.env.VITE_OPENWEATHER_KEY;
+const API_KEY = "a3762cbe9794c892a563bee2dfeafe40";
 
 // Convert ISO country code → full country name
 const getCountryName = (code) => {
@@ -24,7 +24,7 @@ export default function Home({
 }) {
   const [suggestions, setSuggestions] = useState([]);
 
-  /* -------------------------
+  /* -------------------------np
      Autocomplete (Geocoding)
   ------------------------- */
   const handleTypeCity = async (query) => {

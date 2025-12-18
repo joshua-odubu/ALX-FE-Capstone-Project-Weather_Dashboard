@@ -15,7 +15,7 @@ export default function App() {
 
   const [currentWeather, setCurrentWeather] = useState(null);
   const [forecast, setForecast] = useState([]);
-
+  
   return (
     <div className="min-h-screen pb-20">
       <Routes>

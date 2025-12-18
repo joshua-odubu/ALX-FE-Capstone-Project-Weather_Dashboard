@@ -1,49 +1,41 @@
-// src/components/ForecastCard.jsx
+export default function ForecastCard({ day }) {
+  if (!day) return null;
 
-const getIcon = (condition) => {
-  const text = condition.toLowerCase();
+  const date = new Date(day.dt * 1000).toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short"
+  });
 
-  if (text.includes("rain")) return "🌧️";
-  if (text.includes("cloud")) return "☁️";
-  if (text.includes("clear") || text.includes("sun")) return "☀️";
-
-  return "🌤️";
-};
-
-export default function ForecastCard({
-  day,
-  date,
-  tempMax,
-  tempMin,
-  condition,
-  uv
-}) {
   return (
-    <div className="flex items-center justify-between bg-white rounded-2xl shadow-sm px-6 py-4">
-      
-      {/* Left */}
-      <div>
-        <p className="font-medium text-gray-900">{day}</p>
-        <p className="text-sm text-gray-500">{date}</p>
-        <p className="text-sm text-gray-600 mt-1 capitalize">
-          {condition}
-        </p>
-      </div>
+    <div className="rounded-2xl bg-white/30 backdrop-blur-md px-6 py-4 border border-white/40 shadow-sm">
+      <div className="flex justify-between items-center">
 
-      {/* Middle */}
-      <div className="text-lg font-semibold text-gray-900">
-        {tempMax}°{" "}
-        <span className="text-gray-400 font-normal">
-          / {tempMin}°
-        </span>
-      </div>
+        {/* LEFT */}
+        <div>
+          <p className="text-sm font-medium text-gray-800">{date}</p>
+          <p className="text-sm text-gray-500 capitalize">
+            {day.weather?.[0]?.description || "—"}
+          </p>
+          <p className="mt-1 text-lg font-semibold text-gray-900">
+            {day.temp?.max != null ? Math.round(day.temp.max) : "—"}°
+            <span className="text-gray-400 font-normal">
+              {" "} / {day.temp?.min != null ? Math.round(day.temp.min) : "—"}°
+            </span>
+          </p>
+        </div>
 
-      {/* Right */}
-      <div className="flex flex-col items-center text-gray-500 text-lg">
-        <span>{getIcon(condition)}</span>
-        <span className="text-xs mt-1">UV {uv}</span>
-      </div>
+        {/* RIGHT */}
+        <div className="text-right text-sm text-gray-600">
+          <p>UV {day.uvi != null ? day.uvi.toFixed(1) : "—"}</p>
+          <p>
+            {day.wind_speed != null
+              ? `${Math.round(day.wind_speed)} km/h`
+              : "—"}
+          </p>
+        </div>
 
+      </div>
     </div>
   );
 }
