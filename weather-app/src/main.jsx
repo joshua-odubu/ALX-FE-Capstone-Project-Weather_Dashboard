@@ -5,7 +5,13 @@ import { BrowserRouter } from "react-router-dom";
 import "./tailwind.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <BrowserRouter basename="/ALX-FE-Capstone-Project-Weather_Dashboard">
+  <BrowserRouter
+  basename={
+    import.meta.env.PROD
+      ? "/ALX-FE-Capstone-Project-Weather_Dashboard"
+      : "/"
+  }
+>
     <App />
   </BrowserRouter>
 );
