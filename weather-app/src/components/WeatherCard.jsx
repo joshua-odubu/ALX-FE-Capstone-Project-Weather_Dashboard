@@ -1,4 +1,11 @@
-import { SunIcon, CloudIcon, BoltIcon } from "@heroicons/react/24/outline";
+import {
+  SunIcon,
+  CloudIcon,
+  BoltIcon,
+  BeakerIcon,
+  ArrowTrendingUpIcon,
+  EyeIcon
+} from "@heroicons/react/24/outline";
 
 export default function WeatherCard({
   temperature,
@@ -11,27 +18,22 @@ export default function WeatherCard({
   const getWeatherIcon = (condition = "") => {
     const c = condition.toLowerCase();
 
-    // Clear sky
     if (c.includes("clear")) {
       return <SunIcon className="w-12 h-12 text-yellow-400" />;
     }
 
-    // Thunderstorm
     if (c.includes("thunder")) {
       return <BoltIcon className="w-12 h-12 text-purple-600" />;
     }
 
-    // Rain / Drizzle / Shower
     if (c.includes("rain") || c.includes("drizzle") || c.includes("shower")) {
       return <CloudIcon className="w-12 h-12 text-blue-500" />;
     }
 
-    // Snow
     if (c.includes("snow")) {
       return <CloudIcon className="w-12 h-12 text-blue-300" />;
     }
 
-    // Fog / Mist / Haze / Clouds (default)
     return <CloudIcon className="w-12 h-12 text-gray-500" />;
   };
 
@@ -59,21 +61,27 @@ export default function WeatherCard({
 
       {/* Metrics */}
       <div className="flex items-center justify-between text-sm mt-4">
-        <div className="flex flex-col items-center">
+        {/* Humidity */}
+        <div className="flex flex-col items-center gap-1">
+          <BeakerIcon className="w-5 h-5 text-blue-500" />
           <span className="text-gray-600">Humidity</span>
           <span className="text-gray-900 font-medium">
             {humidity}%
           </span>
         </div>
 
-        <div className="flex flex-col items-center">
+        {/* Wind */}
+        <div className="flex flex-col items-center gap-1">
+          <ArrowTrendingUpIcon className="w-5 h-5 text-gray-600" />
           <span className="text-gray-600">Wind</span>
           <span className="text-gray-900 font-medium">
             {wind}
           </span>
         </div>
 
-        <div className="flex flex-col items-center">
+        {/* UV Index */}
+        <div className="flex flex-col items-center gap-1">
+          <EyeIcon className="w-5 h-5 text-yellow-500" />
           <span className="text-gray-600">UV Index</span>
           <span className="text-gray-900 font-medium">
             {uvIndex !== null && uvIndex !== undefined ? uvIndex : "N/A"}
