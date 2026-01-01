@@ -24,9 +24,9 @@ export default function Home({
 }) {
   const [suggestions, setSuggestions] = useState([]);
 
-  /* -------------------------np
-     Autocomplete (Geocoding)
-  ------------------------- */
+  
+    // Autocomplete (Geocoding)
+  
   const handleTypeCity = async (query) => {
     if (!query || query.length < 2) {
       setSuggestions([]);
@@ -56,9 +56,8 @@ export default function Home({
     }
   };
 
-  /* -------------------------
-     Fetch weather (One Call 3.0)
-  ------------------------- */
+  // Fetch weather (One Call 3.0)
+ 
   const fetchWeather = async (input) => {
     try {
       let lat, lon, name, countryCode;
@@ -91,9 +90,9 @@ export default function Home({
       const data = await weatherRes.json();
       if (!data.current) return;
 
-      /* -------------------------
-         Update shared state
-      ------------------------- */
+
+      // Update shared state
+
       setLocation({
         city: name,
         country: getCountryName(countryCode)
@@ -117,9 +116,9 @@ export default function Home({
     }
   };
 
-  /* -------------------------
-     Load default city
-  ------------------------- */
+
+      // Load default city
+
   useEffect(() => {
     fetchWeather("London");
   }, []);

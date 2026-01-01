@@ -12,15 +12,15 @@ const THEME_KEY = "weather_theme";
 const UNIT_KEY = "weather_unit";
 
 export default function Settings() {
-  /* -----------------------------
-     State
-  ----------------------------- */
+ 
+  // State
+  
   const [theme, setTheme] = useState("light");
   const [unit, setUnit] = useState("metric"); // ✅ ADDED
 
-  /* -----------------------------
-     Load settings on mount
-  ----------------------------- */
+
+    // Load settings on mount
+
   useEffect(() => {
     const savedTheme = localStorage.getItem(THEME_KEY);
     const savedUnit = localStorage.getItem(UNIT_KEY);
@@ -35,9 +35,9 @@ export default function Settings() {
     }
   }, []);
 
-  /* -----------------------------
-     Persist theme
-  ----------------------------- */
+
+    // Persist theme
+
   useEffect(() => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
@@ -48,16 +48,16 @@ export default function Settings() {
     }
   }, [theme]);
 
-  /* -----------------------------
-     Persist unit
-  ----------------------------- */
+
+    // Persist unit
+
   useEffect(() => {
     localStorage.setItem(UNIT_KEY, unit);
   }, [unit]);
 
-  /* -----------------------------
-     Reset
-  ----------------------------- */
+
+    // Reset
+
   const resetSettings = () => {
     setTheme("light");
     setUnit("metric");
