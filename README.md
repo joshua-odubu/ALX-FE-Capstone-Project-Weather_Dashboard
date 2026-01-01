@@ -1,75 +1,78 @@
 🌤️ Weather Dashboard App
 
-A modern and minimalist weather dashboard built with React, Vite, and Tailwind CSS.
-The app displays today’s weather, daily summaries, clothing and eyewear recommendations, and supports custom locations.
-The UI follows a clean glass-morphism style with responsive layouts and simple animations.
+A responsive weather dashboard built with React, Vite, and Tailwind CSS.
+The application allows users to search for a city and view weather information in a clean, modern interface designed for clarity and ease of use.
+
+This project was developed as part of the ALX Frontend Engineering Capstone to demonstrate frontend fundamentals, API-ready architecture, and deployment.
 
 ⸻
 
 🚀 Features
 
-Current Weather
-	•	Dynamic weather card
-	•	Auto-refresh button with randomised conditions (for now)
-	•	Icons for conditions, humidity, wind and UV index
-	•	Feels-like temperature and weather description
-	•	Smooth glass UI styling
+Current Weather Display
+	•	Displays weather information for the selected location
+	•	Shows temperature, weather condition, humidity, wind speed, and related icons
+	•	Clean, minimal card-based layout
+	•	Responsive design for desktop and mobile screens
 
-Daily Summary
-	•	Summary of today’s overall weather
-	•	Notification icon (future: schedule daily weather reminders)
+City Search
+	•	Search input to change location
+	•	When an invalid city is entered, the app remains on the last valid location without breaking
+	•	Designed for future API-based validation and feedback
 
-Recommendations
-	•	Clothing suggestions based on temperature
-	•	Eyewear guidance based on UV index
-	•	Future: extend recommendations for rain, snow, wind or extreme heat
+Navigation
+	•	Multi-page layout with Home, Forecast, and Settings views
+	•	Simple navigation between pages
+	•	Known behaviour: returning to the Home page resets the location to the current/default city
 
-Search + Location
-	•	Search bar for entering or changing city
-	•	Future: integrate real weather API (OpenWeather / Tomorrow.io)
-	•	Header shows location and supports mobile responsiveness
-
-Responsive Layout
-	•	Clean, minimal layout
-	•	Works on desktop and mobile
-	•	Uses Tailwind’s grid and spacing utilities for structured cards
+Settings Page (In Progress)
+	•	Settings page is present in the UI
+	•	Adjustments currently do not affect app behaviour
+	•	Planned to be connected to global state in a future iteration
 
 ⸻
 
 🛠️ Tech Stack
 
-Frontend:
+Frontend
 	•	React
 	•	Vite
 	•	Tailwind CSS
-	•	Heroicons (UI icons)
+	•	React Router
+	•	Heroicons
 
-Planned Integrations:
-	•	OpenWeather API or Tomorrow.io API
-	•	Local storage for user preferences
-	•	Automatic daily summary notifications
+Deployment
+	•	Netlify
 
 ⸻
 
-📦 Installation
+📦 Installation & Setup
 
 Clone the repository:
+
 git clone https://github.com/joshua-odubu/ALX-FE-Capstone-Project-Weather_Dashboard.git
 
 Navigate into the project:
+
 cd weather-app
 
 Install dependencies:
+
 npm install
 
-Start development server:
+Start the development server:
+
 npm run dev
 
 Open in your browser:
-http://localhost:5173/
 
+http://localhost:5173
+
+
+⸻
 
 🧩 Project Structure
+
 src/
  ├── components/
  │    ├── Header.jsx
@@ -78,43 +81,51 @@ src/
  │    ├── ClothingCard.jsx
  │    └── EyewearCard.jsx
  ├── pages/
- │    └── Home.jsx
+ │    ├── Home.jsx
+ │    ├── Forecast.jsx
+ │    └── Settings.jsx
  ├── styles/
  │    └── tailwind.css
  ├── App.jsx
  ├── main.jsx
- └── utils/ (future helpers and API functions)
+ └── utils/
+      └── (planned helpers and API functions)
 
-
- 🔮 Roadmap
-
-Short-term
-	•	Connect to real weather API
-	•	Replace random data with real-time conditions
-	•	Improve recommendations for more weather types
-	•	Add loading animations
-	•	Add error handling (invalid city, API failure)
-
-Medium-term
-	•	7-day forecast page
-	•	User settings page
-	•	Light/dark theme toggle
-	•	Save preferred city
-
-Long-term
-	•	Push notifications for daily 5 AM summary
-	•	Use geolocation to detect user’s current position
-	•	Offline mode / caching
 
 ⸻
 
-🤝 Contributing
+⚠️ Known Limitations
+	•	Invalid city searches do not yet display explicit error messages
+	•	Settings changes do not yet persist or affect the app
+	•	Navigation back to the Home page resets the selected location
 
-Pull requests are welcome. For major changes, please open an issue first to discuss the change.
+These are planned improvements and reflect the iterative nature of the project.
+
+⸻
+
+🔮 Roadmap
+
+Short-term
+	•	Integrate real weather data using the OpenWeather API
+	•	Add explicit error handling for invalid city searches
+	•	Improve state persistence across navigation
+	•	Add loading indicators
+
+Medium-term
+	•	7-day forecast view
+	•	Functional settings (units, preferences)
+	•	Save preferred location using local storage
+	•	Light/dark theme toggle
+
+Long-term
+	•	Geolocation-based weather detection
+	•	Daily weather summaries
+	•	Offline support and caching
 
 ⸻
 
 📄 License
 
-This project is for educational and personal learning use under the ALX Frontend Engineering programme.
-You may modify and expand it as needed.
+This project was built for educational and personal learning purposes as part of the ALX Frontend Engineering programme.
+You are free to explore, modify, and extend it for learning.
+
